@@ -24,7 +24,9 @@ app.post('/ask', (req, res) => {
         questions.push(newQuestion);
         fs.writeFile('./questions.txt', JSON.stringify(questions), (err) => {
           if(err) console.log(err)
-          else console.log("Success!");
+          else res.redirect('http://localhost:8080/');
+          //http://localhost:6969/
+          //http://localhost:8080/
         });
       } catch (error) {
         console.log("Error: ", error);

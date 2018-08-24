@@ -13,10 +13,12 @@
   </nav>
   <h1>Hãy hỏi cộng đồng một câu hỏi đúng/sai hoặc có/không</h1>
   <form action="http://localhost:6969/ask" method="POST">
-    <textarea name="question" cols="30" rows="10"></textarea>
-    <span>còn 200/200 ký tự</span>
+    <textarea maxlength="200" id="questionInput" name="question" cols="30" rows="10"></textarea>
+    <span>còn <span id="count">200</span>/200 ký tự</span>
     <!-- <button type="submit">Gửi</button> -->
     <input type="submit" value="Gửi" />
   </form>
+
+  <script src="/js/ask.js"></script>
 </body>
 </html>
