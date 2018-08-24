@@ -1,0 +1,46 @@
+:root {
+  --width-p: 15px;
+}
+
+body {
+  color: #ffffff;
+  background-color: rgba(0, 0, 128, 0.5);
+}
+
+p {
+  /* background-image: url('https://i2.wp.com/beebom.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg'); */
+  background-color: rgba(0, 0, 128, 0.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: calc(100% - 100px);
+}
+
+ul.text-red > li {
+  color: red;
+}
+
+ul > li {
+  color: blue;
+}
+
+h1 {
+  color: red;
+}
+
+img {
+  width: 100px;
+  transition: all 1s ease-in-out 1s;
+}
+
+img:hover {
+  width: 400px;
+}
+
+a {
+  transition: all .2s ease-in-out;
+}
+
+a:hover {
+  color: red;
+}
