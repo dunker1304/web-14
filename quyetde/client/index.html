@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Quyết đê</title>
+  
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="/js/ask.js"></script>
+  <script src="/js/main.js"></script>
 </head>
 <body>
   <nav>
     <a href="/ask.html">Hỏi nhanh</a>
     <a href="/">Đáp gọn</a>
   </nav>
-  <h1>Hãy hỏi cộng đồng một câu hỏi đúng/sai hoặc có/không</h1>
-  <form action="http://localhost:6969/ask" method="POST">
-    <textarea maxlength="200" id="questionInput" name="question" cols="30" rows="10"></textarea>
-    <span>còn <span id="count">200</span>/200 ký tự</span>
-    <input type="submit" value="Gửi" />
-  </form>
+  <div class="question">
+    <h1 id="questionContent">Question content</h1>
+    <div>
+      <button>Sai / Không / Trái</button>
+      <button>Đúng / Có / Phải</button>
+    </div>
+    <div>
+      <button>Xem kết quả</button>
+      <button>Câu hỏi khác</button>
+    </div>
+  </div>
 </body>
 </html>
