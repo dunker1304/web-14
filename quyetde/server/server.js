@@ -17,10 +17,15 @@ app.post('/ask', (req, res) => {
     if(err) console.log(err)
     else {
       try {
-        const newQuestion = { questionContent: req.body.question }
         let questions = [];
         if(fileData.length > 0 && JSON.parse(fileData).length) {
           questions = JSON.parse(fileData);
+        }
+        const newQuestion = {
+          id: questions.length + 1,
+          questionContent: req.body.question,
+          yes: 0,
+          no: 0
         }
         questions.push(newQuestion);
         fs.writeFile('./questions.txt', JSON.stringify(questions), (err) => {
@@ -48,6 +53,10 @@ app.get('/question', (req, res) => {
       }
     }
   });
+});
+
+app.put('/answer', (req, res) => {
+  console.log(req.body);
 });
 
 app.listen(6969, (err) => {
