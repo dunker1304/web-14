@@ -1,1 +1,1 @@
-[{"id":1,"questionContent":"Hello","yes":0,"no":0}]
+[{"id":1,"questionContent":"Hello","yes":4,"no":1},{"id":2,"questionContent":"1 + 1 = 10","yes":5,"no":7}]

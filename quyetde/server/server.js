@@ -55,8 +55,47 @@ app.get('/question', (req, res) => {
   });
 });
 
+app.get('/question/:questionId', (req, res) => {
+  fs.readFile('./questions.txt', (err, fileData) => {
+    if(err) console.log(err)
+    else {
+      try {
+        let questionId = req.params.questionId;
+        let questions = JSON.parse(fileData);
+        let question = questions[questionId - 1];
+        res.send({ message: "Success!", question });
+      } catch (error) {
+        console.log("Error!!! ", error);
+      }
+    }
+  })
+})
+
 app.put('/answer', (req, res) => {
-  console.log(req.body);
+  // const answer = req.body.answer;
+  // const questionId = req.body.questionId;
+  const { answer, questionId } = req.body;
+  fs.readFile('./questions.txt', (err, fileData) => {
+    if(err) console.log(err)
+    else {
+      try {
+        let questions = JSON.parse(fileData);
+        if(questions[questionId - 1]) {
+          // if(answer == 'yes')
+          //   questions[questionId - 1].yes += 1
+          // else
+          //   questions[questionId - 1].no += 1
+          questions[questionId - 1][answer] += 1;
+        }
+        fs.writeFile('./questions.txt', JSON.stringify(questions), (err) => {
+          if(err) console.log(err)
+          else res.send({ message: "Success!", question: questions[questionId - 1] });
+        });
+      } catch (error) {
+        console.log("Error!!! ", error);
+      }
+    }
+  });
 });
 
 app.listen(6969, (err) => {
