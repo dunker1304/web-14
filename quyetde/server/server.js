@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -42,62 +41,37 @@ app.get('/question', (req, res) => {
         else res.send({ message: 'Success', question: questionFound });
       });
   });
-  // fs.readFile('./questions.txt', (err, fileData) => {
-  //   if(err) console.log(err)
-  //   else {
-  //     try {
-  //       let questions = JSON.parse(fileData);
-  //       let randomNum = Math.floor(Math.random()*questions.length);
-  //       let randomQuestion = questions[randomNum];
-  //       res.send({ message: "Success!", question: randomQuestion });
-  //     } catch (error) {
-  //       console.log("Error!!! ", error);
-  //     }
-  //   }
-  // });
 });
 
 app.get('/question/:questionId', (req, res) => {
-  fs.readFile('./questions.txt', (err, fileData) => {
+  const { questionId } = req.params;
+  QuestionModel.findById(questionId, (err, questionFound) => {
     if(err) console.log(err)
-    else {
-      try {
-        let questionId = req.params.questionId;
-        let questions = JSON.parse(fileData);
-        let question = questions[questionId - 1];
-        res.send({ message: "Success!", question });
-      } catch (error) {
-        console.log("Error!!! ", error);
-      }
-    }
-  })
+    else res.send({ message: "Success!", question: questionFound });
+  });
 })
 
 app.put('/answer', (req, res) => {
-  // const answer = req.body.answer;
-  // const questionId = req.body.questionId;
   const { answer, questionId } = req.body;
-  fs.readFile('./questions.txt', (err, fileData) => {
+  QuestionModel.findById(questionId, (err, questionFound) => {
     if(err) console.log(err)
+    if(!questionFound) res.send({ message: 'Question not found!', question: null })
     else {
-      try {
-        let questions = JSON.parse(fileData);
-        if(questions[questionId - 1]) {
-          // if(answer == 'yes')
-          //   questions[questionId - 1].yes += 1
-          // else
-          //   questions[questionId - 1].no += 1
-          questions[questionId - 1][answer] += 1;
-        }
-        fs.writeFile('./questions.txt', JSON.stringify(questions), (err) => {
-          if(err) console.log(err)
-          else res.send({ message: "Success!", question: questions[questionId - 1] });
-        });
-      } catch (error) {
-        console.log("Error!!! ", error);
-      }
+      questionFound[answer] += 1;
+      questionFound.save((err, questionUpdated) => {
+        if(err) console.log(err)
+        else res.send({ message: 'Success', question: questionUpdated });
+      })
     }
   });
+  // QuestionModel.findByIdAndUpdate(
+  //   questionId,
+  //   { $inc: { [answer]: 1 } },
+  //   { new: true },
+  //   (err, questionUpdated) => {
+  //     if(err) console.log(err)
+  //     else res.send({ message: 'success', question: questionUpdated });
+  //   });
 });
 
 app.listen(6969, (err) => {

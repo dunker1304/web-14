@@ -18,7 +18,6 @@ $(document).ready(function() {
       url: 'http://localhost:6969/answer',
       method: 'PUT',
       data: {
-        // answer: answer,
         answer,
         questionId
       },
@@ -29,7 +28,7 @@ $(document).ready(function() {
           $('#voteYes').text(((data.question.yes/totalVote)*100).toFixed(2));
           $('#voteNo').text(((data.question.no/totalVote)*100).toFixed(2));
           $('.questionInfo').css('display', 'block');
-          $('.answer').css('display', 'none');
+          $('.answers').css('display', 'none');
         }
       },
       error: function(error) {
@@ -50,7 +49,7 @@ $(document).ready(function() {
           $('#voteYes').text(((data.question.yes/totalVote)*100).toFixed(2));
           $('#voteNo').text(((data.question.no/totalVote)*100).toFixed(2));
           $('.questionInfo').css('display', 'block');
-          $('.answer').css('display', 'none');
+          $('.answers').css('display', 'none');
         }
       },
       error: function(error) {
