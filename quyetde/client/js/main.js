@@ -3,8 +3,8 @@ $(document).ready(function() {
     url: 'http://localhost:6969/question',
     method: 'GET',
     success: function(data) {
-      $('#questionContent').text(data.question.questionContent);
-      $('.answer').attr("data-id", data.question.id);
+      $('#questionContent').text(data.question.content);
+      $('.answer').attr("data-id", data.question._id);
     },
     error: function() {
       console.log("fail!");

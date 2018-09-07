@@ -2,6 +2,14 @@ const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+const QuestionModel = require('./models/questionModel');
+
+mongoose.connect('mongodb://localhost/quyetde', (err) => {
+  if(err) console.log("DB connect error!", err)
+  else console.log("DB connect success!");
+});
 
 let app = express();
 
@@ -13,46 +21,40 @@ app.get('/', (req, res) => {
 });
 
 app.post('/ask', (req, res) => {
-  fs.readFile('./questions.txt', (err, fileData) => {
+  const newQuestion = {
+    content: req.body.question
+  }
+  QuestionModel.create(newQuestion, (err, questionCreated) => {
     if(err) console.log(err)
-    else {
-      try {
-        let questions = [];
-        if(fileData.length > 0 && JSON.parse(fileData).length) {
-          questions = JSON.parse(fileData);
-        }
-        const newQuestion = {
-          id: questions.length + 1,
-          questionContent: req.body.question,
-          yes: 0,
-          no: 0
-        }
-        questions.push(newQuestion);
-        fs.writeFile('./questions.txt', JSON.stringify(questions), (err) => {
-          if(err) console.log(err)
-          else res.redirect('http://localhost:8080/');
-        });
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    }
+    else res.redirect('http://localhost:8080/');
   });
 });
 
 app.get('/question', (req, res) => {
-  fs.readFile('./questions.txt', (err, fileData) => {
-    if(err) console.log(err)
-    else {
-      try {
-        let questions = JSON.parse(fileData);
-        let randomNum = Math.floor(Math.random()*questions.length);
-        let randomQuestion = questions[randomNum];
-        res.send({ message: "Success!", question: randomQuestion });
-      } catch (error) {
-        console.log("Error!!! ", error);
-      }
-    }
+  QuestionModel.find({  }, (err, questions) => {
+    let randomNum = Math.floor(Math.random()*questions.length);
+    QuestionModel
+      .findOne({ })
+      .skip(randomNum == 0 ? randomNum : randomNum - 1)
+      .exec((err, questionFound) => {
+        console.log(questionFound)
+        if(err) console.log(err)
+        else res.send({ message: 'Success', question: questionFound });
+      });
   });
+  // fs.readFile('./questions.txt', (err, fileData) => {
+  //   if(err) console.log(err)
+  //   else {
+  //     try {
+  //       let questions = JSON.parse(fileData);
+  //       let randomNum = Math.floor(Math.random()*questions.length);
+  //       let randomQuestion = questions[randomNum];
+  //       res.send({ message: "Success!", question: randomQuestion });
+  //     } catch (error) {
+  //       console.log("Error!!! ", error);
+  //     }
+  //   }
+  // });
 });
 
 app.get('/question/:questionId', (req, res) => {
