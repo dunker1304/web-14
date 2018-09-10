@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 const QuestionModel = require('./models/questionModel');
 
+const QuestionRouter = require('./routers/questionRouter');
+
 mongoose.connect('mongodb://localhost/quyetde', (err) => {
   if(err) console.log("DB connect error!", err)
   else console.log("DB connect success!");
@@ -29,27 +31,7 @@ app.post('/ask', (req, res) => {
   });
 });
 
-app.get('/question', (req, res) => {
-  QuestionModel.find({  }, (err, questions) => {
-    let randomNum = Math.floor(Math.random()*questions.length);
-    QuestionModel
-      .findOne({ })
-      .skip(randomNum == 0 ? randomNum : randomNum - 1)
-      .exec((err, questionFound) => {
-        console.log(questionFound)
-        if(err) console.log(err)
-        else res.send({ message: 'Success', question: questionFound });
-      });
-  });
-});
-
-app.get('/question/:questionId', (req, res) => {
-  const { questionId } = req.params;
-  QuestionModel.findById(questionId, (err, questionFound) => {
-    if(err) console.log(err)
-    else res.send({ message: "Success!", question: questionFound });
-  });
-})
+app.use('/question', QuestionRouter);
 
 app.put('/answer', (req, res) => {
   const { answer, questionId } = req.body;
