@@ -9,16 +9,34 @@
 
 let pageToken = '';
 let isLoadingMore = false;
+let getVideoTimeout;
+let isThrottle = false;
 
 $(document).ready(function() {
-    $('#search').on('submit', function(event) {
+    $('#keyword').on('input', function(event) {
         event.preventDefault();
+
+        pageToken = '';
         
         const keyword = $('#keyword').val();
 
         $('#result-list').empty();
 
-        getVideoItem(keyword);
+        //Throttle
+        // if(!isThrottle) {
+        //     isThrottle = true;
+        //     getVideoItem(keyword);
+        //     setTimeout(function() {
+        //         isThrottle = false;
+        //     }, 5*1000)
+        // }
+
+        //Debounce
+        if(getVideoTimeout) clearTimeout(getVideoTimeout);
+
+        getVideoTimeout = setTimeout(function() {
+            getVideoItem(keyword);
+        }, 1000);
     });
 
     $(window).on('scroll', function() {
@@ -33,7 +51,8 @@ $(document).ready(function() {
 });
 
 function getVideoItem(keyword) {
-    console.log(pageToken);
+    $('.lds-ring').css('display', 'inline-block');
+
     $.ajax({
         url: `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=25&q=${keyword}&key=AIzaSyA9gQZ-oYomFypZN7PsupZJtOfQqA6Q3qw&pageToken=${pageToken}`,
         type: 'GET',
@@ -79,10 +98,13 @@ function getVideoItem(keyword) {
 
                 $('#result-list').append('<h3>No more!</h3>');
             }
+
+            $('.lds-ring').css('display', 'none');
         },
         error: function(error) {
             console.log(error);
             isLoadingMore = false;
+            $('.lds-ring').css('display', 'none');
         }
     });
 }

@@ -1,0 +1,14 @@
+- Users:
+    - username
+    - password
+    - name
+    - avatar
+    - gender
+- Images:
+    - imageUrl
+    - view
+    - like
+    - owner
+    - caption
+    - tilte
+    - comments
